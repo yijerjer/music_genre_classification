@@ -33,13 +33,12 @@ def time_since(start):
     secs = round(diff - mins * 60, 1)
     return f"{mins}min {secs}s"
 
-sr = 22050
-def create_feature_array(tracks, f_type, sr=sr):
+def create_feature_array(tracks, f_type, sr=22050, hl=2048):
     print(f"Creating array for {f_type}")
     start = time.time()
     track_ids = []
     failed_track_ids = []
-    f_shape = {"cqt": (84, 320)}
+    f_shape = {"cqt": (84, 320), "stft": (257, 320)}
     feature_arr = np.empty((0, f_shape[f_type][0], f_shape[f_type][1]))
 
     count = 0
@@ -53,8 +52,14 @@ def create_feature_array(tracks, f_type, sr=sr):
 
         if waveform.any():
             if f_type == "cqt":
-                single_arr = np.abs(librosa.cqt(waveform, sr=sr, hop_length=2048, bins_per_octave=12, n_bins=7*12, res_type="polyphase"))
+                single_arr = np.abs(librosa.cqt(waveform, sr=sr, hop_length=hl, bins_per_octave=12, n_bins=7*12, res_type="polyphase"))
+            if f_type == "stft":
+                single_arr = np.abs(librosa.stft(waveform, hop_length=hl, n_fft=512))
+            if single_arr.shape[1] >= 320:
                 single_arr = single_arr[:, :320]
+            else:
+                failed_track_ids.append(track_id)
+                continue
             track_ids.append(track_id)
             feature_arr = np.append(feature_arr, [single_arr], axis=0)
         else:
