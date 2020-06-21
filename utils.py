@@ -13,7 +13,7 @@ def load_csv(name, tracks_size="small"):
         df = pd.read_csv(f"{METADATA_DIR}/tracks.csv", index_col=0, header=[0, 1])
         df = df[df["set", "subset"] == tracks_size]
     elif name == "genre":
-        df = pd.read_csv(f"{METADATA_DIR}genres.csv")
+        df = pd.read_csv(f"{METADATA_DIR}/genres.csv")
 
     return df
 
