@@ -1,5 +1,5 @@
 {
-    "python.dataScience.jupyterServerURI": "http://127.0.0.1:8888/?token=2cda43b01d6d070d736ef31cc1e1afcf52f700baef417a0d",
+    "python.dataScience.jupyterServerURI": "http://127.0.0.1:8888/?token=77abbf385a6030b1c65c4682131af5571470ac4a5c4c58e6",
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": false,
     "python.linting.enabled": true,
