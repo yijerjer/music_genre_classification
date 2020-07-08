@@ -4,7 +4,7 @@
 
 #### Themes: Music Information Retrieval, Audio Signal Processing, (Fourier) Transforms
 
-#### Note: I am neither an expert in the field of Music Information Retrieval (MIR) nor am I particularly well-versed in deep learning. This project is my attempt to get my feet wet and start exploring both of these fields. Big shoutout to arXiv, Medium and countless other blogs, and DeepMind x UCL lecture series for guiding me through the world of MIR and Deep Learning.
+Note: I am neither an expert in the field of Music Information Retrieval (MIR) nor am I particularly well-versed in deep learning. This project is my attempt to get my feet wet and start exploring both of these fields. Big shoutout to arXiv, Medium and countless other blogs, and DeepMind x UCL lecture series for guiding me through the world of MIR and Deep Learning.
 
 ## Introduction
 
@@ -22,12 +22,22 @@ This project aims to replicate some of the architectures mentioned above and com
 ## Method
 
 ### Dataset
-This project uses the Free Music Archive (FMA) dataset, which can be found here: https://github.com/mdeff/fma. More specifically, this project uses the _small dataset_ containing 8000 tracks, with 8 equally distributed 'parent' genre.
+This project uses the Free Music Archive (FMA) dataset, which can be found here: https://github.com/mdeff/fma. More specifically, this project uses the _small dataset_ containing 8000 tracks, with 8 equally distributed 'parent' genre. This dataset provides a 30 second clip of the track in an `.mp3` file format. 
 
-This dataset also provides pre-computed features, which includes the statistical features of various types of transforms of the raw audio data, such as Constant-Q Transform (CQT) and Mel-Spectrogram Cepstral Coefficients (MFCC). Non-deep learning machine learning algorithms were used on these pre-calculated features to obtain a baseline accuracy. A simple overview of the baseline models can be found here: [base_models.ipynb]() 
+Moreover, this dataset provides pre-computed features, which includes the statistical features of various types of transforms of the raw audio data, such as Constant-Q Transform (CQT) and Mel-Spectrogram Cepstral Coefficients (MFCC). Non-deep learning machine learning algorithms were used on these pre-calculated features to obtain a baseline accuracy. A simple overview of the pre-computed features and baseline models can be found at [exploration.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/exploration.ipynb) and [base_models.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/base_models.ipynb) respectively.
 
 
-### Architecture
+### Features and Architecture
+
+With the raw audio `.mp3` files provided from the FMA dataset, two main features, Constant-Q Transform (CQT) and Short-Time Fourier Transform (STFT), were extracted from the raw audio data, producing a 2D feature of a track in the frequency and temporal domain. A hop length of 1024 was used in both cases, and a n_fft of 1024 was used for the STFT. These values were used in order to balance between achieving a high enough resolution of the features and maintaining a reasonably sized input to the neural network later on. Variations of these two features were also obtained, where the Chroma CQT and Chroma energy normalised statistics (CENS) were obtained from the CQT, and the Chroma STFT and Mel-scaled STFT were obtained from the STFT. In total, there were 6 features that were extracted - CQT, Chroma CQT, CENS, STFT, Chroma STFT and Mel-scaled STFT.
+
+![alt text]()
+
+Taking inspiration from the various CNN architectures in Choi et al's [6] paper, 3 simple CNN architectures were devised and experimented with. Here are overviews of the aptly-named architectures:
+1. Frequency CNN: This convolutional neural network leaves the length of the frequency domain untouched, where temporal 1D convolutions are performed (alongside appropriate max pooling) until a 1D array is left per feature map. The 1D arrays are then flattened and fed into a fully connected neural network.
+2. Temporal CNN: This convolutional neural network leaves the length of the temporal domain untouched, where 1D convolutions across the frequency domain are performed (alongside appropriate max pooling) until 1D array is left per feature map. The 1D arrays are then flattened and fed into a fully connected neural network.
+3. Square CNN: This convolutional neural network involves 2D square convolutions (alongside appropriate max pooling, not necessarily square) until a single value is left per feature map. This is then fed into a fully connected neural network.
+The exact implmentation of each CNN for each of the siz features can be found in [cnn_models.py](https://github.com/yijerjer/music_genre_classification/blob/master/cnn_models.py).
 
 ### Methodology
 
