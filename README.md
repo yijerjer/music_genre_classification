@@ -66,7 +66,7 @@ In the recurrent part of both neural networks, experiments were performed with L
 
 For each architecture and each feature, three repeats were performed in order to obtain an approxiamate value of the mean accuracies of the model. The models were trained for between 50 - 100 epochs, and the models were saved at every 5 epochs. The test accuracy was determined for each model by picking out the maximum accuracy in all of the saved epochs. 
 
-All of the models aboved used the Adam optimizer with a learning rate of 0.001. Better performance was observed when compared to the SGD optimizer in initial experiments. Each layer of convolution is followed by batch normalisation and a ReLU activation function.
+All of the models above used the Adam optimizer with a learning rate of 0.001. Better performance was observed when compared to the SGD optimizer in initial experiments. Each layer of convolution is followed by batch normalisation and a ReLU activation function.
 
 
 ## Results and Discussion
@@ -125,7 +125,7 @@ The results here come as a surprise as both architectures perform slightly worse
 
 ### Bottom-up Broadcast Neural Network
 
-An accuracy of **51.1±0.1** was achieved with this neural network. Note that this neural network was the most computationally expensive when compared to the rest of the architectures above, and took a significantly longer amount of training time . The trainng loss, ROC curve and confusion matrix can be found in [bbnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/bbnn_architecture.ipynb). The ROC curve and confusion matrix of this neural network is also shown below.
+An accuracy of **51.1±0.1** was achieved with this neural network. Note that this neural network was the most computationally expensive when compared to the rest of the architectures above, and took a significantly longer amount of training time. The training loss, ROC curve and confusion matrix can be found in [bbnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/bbnn_architecture.ipynb). The ROC curve and confusion matrix of this neural network is also shown below.
 
 ![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/bbnn.png?raw=true)
 
@@ -133,31 +133,32 @@ This architecture proves to be the best performing architecture, achieving the h
 
 ### Overall Discussion
 
-Comparing the baseline models and the experiments done on the neural network architectures, it might initially appear that the neural networks generally perform no better, if not worse, than the SVM from the baseline models. However, upon a further look, it can be considered to be unfair to compare these two approaches given the different input data into the baseline models and neural networks. The baseline model uses the pre-computed features from the FMA dataset, which includes statistical features from the CQT, STFT, MFCC, and spectral data, whereas the neural networks only take a single 2D features, such as the CQT, into account. 
+### Baseline Models vs Neural Networks
+Comparing the baseline models and the experiments done on the neural network architectures, it might initially appear that the neural networks generally perform no better, if not worse, than the SVM from the baseline models. However, upon a more detailed look, it can be considered to be unfair to compare these two approaches given the different input data into the baseline models and neural networks. The baseline model uses the pre-computed features from the FMA dataset, which includes statistical features from the CQT, STFT, MFCC, and spectral data, whereas the neural networks only take a single 2D feature, such as the CQT, into account. Thus, despite its high computational cost, it can be argued that a neural network is much more powerful as it is able to produce similar results to the baseline models despite only taking in a single type of feature.
 
+### Comparing Genres
+Looking at the ROC curves and confusion matrices from both the baseline models and neural networks, it is clear that there are genres that are more 'easily identifiable' than others. Taking the confusion matrix of the bottom-up broadcast neural network above as am example, it is very clear that genres such as Hip-Hop, Rock and Electronic have much higher accuracies, whilst genres such as Pop and Experimental fared significantly worse. The ROC curve also tells a similar story as the AUC for the top three genres are much higher than the rest of the genres. Furthermore, the t-SNE plot of the pre-computed features also reaffirms this notion, where the plot shows clearer, more concentrated clusters of data points for Hip-Hop, Rock and Electronic. The proximity of the clusters of these three genres to one another in the t-SNE plot could also point to inherent similarities between the three genres, for example the prevalence of strong heavy and constant beats.
 
+A reason that could explain the dismal accuracies for genres such as Pop and Experimental is the diversity, variations and breadth of music within these genres. One could argue that the genre of Experimental and/or Pop offers more flexibility in the definition of such a genre, when compared to genres such as Electronic and Hip-Hop. This diversity makes it more difficult for machine learning algorithms to find common patterns that are prevalent throughout these genres, thus resulting in lower accuracies.
 
-compare baseline_models and CNN/RNN
-
-Looking at the ROC curves and confusion matrices across 
-
-confusion matrices
-comparing to baseline models
 
 ## Conclusion
 
+Combining statistical features from various transforms such as CQT, STFT and MFCC, non-deep learning algorithms such as SVM and LDA already set a high benchmark for genre classification, achieving close to an accuracy of 50%. Using neural networks, albeit on only a single type of transform, in particular CQT, produces similar results whereby the best accuracy obtained was 51%.
 
+This project shows that a simple CNN architecture is able to achieve an accuracy of 45.5%. With the help of more complex CNN architecture that is Densenet, there is a marginal improvement of 1%, pushing the accuracy up to 46.7%. Employing a recent architecture known as a bottom-up broadcast neural network, which uses Inception blocks within it, the accuracy showed a sizeable improvement to 51.1%. This shows the promise of using parallel streams of convolutions to achieve higher accuracy in genre classification.
 
-
-
+When it comes to the hybrid architectures of combining CNNs and RNNs, the implementation here does not perform as well as a simple CNN architecture, only achieving a highest accuracy of 44.9%. This comes as a surprise given the previous successful work done on this, and this could point to a potential issue with the implementation of the architecture in this project. A more in-depth understanding of the model would help in troubleshooting the weak performance of this model.
 
 ## Further Work
-* Data Augmentation
-* Additional two papers on autoencoders, and random projections of mel-spectrograms
-* Use other audio features such as MFCC, and potentially combine multiple features together 
-    * Likely to be reason why baseline model works better since it includes multiple features, rather than just a single one
-
-Have a look at CQT exploration by genre.
+* Data Augmentation: Create additional and alternative data from the current dataset, such that training the models on the new augmented data can be more generalisable.
+    * The pitch on the tracks can be shifted by a semi-tone or two
+    * A single 30 second track can be chopped up into chunks of 5 seconds
+* After completing this project, two additional two papers were published recently which could introduce new ideas into the realm of genre classification.
+    * COALA: Co-Aligned Autoencoders for Learning Semantically Enriched Audio Representations, https://arxiv.org/pdf/2006.08386.pdf
+    * On large-scale genre classification in symbolically encoded music by automatic identification of repeating patterns, https://arxiv.org/pdf/1910.09242.pdf 
+* Include other audio features, such as MFCC, into the same neural network.
+    * This could work by parallelising neural networks of different features, then concatenating the resulting output which can be fed into another neural network for classification.
 
 ## References
 
