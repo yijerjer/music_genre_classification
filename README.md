@@ -29,7 +29,7 @@ Moreover, this dataset provides pre-computed features, which includes the statis
 
 ### Features
 
-Using the raw audio `.mp3` files provided by the FMA dataset, two main features, Constant-Q Transform (CQT) and Short-Time Fourier Transform (STFT), were extracted from the raw audio data, which produced a 2D feature of a track in the frequency and temporal domain. A hop length of 1024 was used in both cases, and a n_fft of 1024 was used for the STFT. These values were used in order to balance between achieving a high enough resolution of the features and maintaining a reasonably sized input to the neural network later on. Variations of these two features were also obtained, where the Chroma CQT and Chroma energy normalised statistics (CENS) were obtained from the CQT, and the Chroma STFT and Mel-scaled STFT were obtained from the STFT. In total, there were six features that were extracted - CQT, Chroma CQT, CENS, STFT, Chroma STFT and Mel-scaled STFT, and these can be seen in the image below. (Note that in the end, the linear scaled STFT was not used due to its large size and the lack of computational resources for it to be used as an input)
+Using the raw audio `.mp3` files provided by the FMA dataset, two main features, Constant-Q Transform (CQT) and Short-Time Fourier Transform (STFT), were extracted from the raw audio data, which produced a 2D feature of a track in the frequency and temporal domain. A hop length of 1024 was used in both cases, and a n_fft of 1024 was used for the STFT. These values were used in order to balance between achieving a high enough resolution of the features and maintaining a reasonably sized input to the neural network later on. Variations of these two features were also obtained, where the Chroma CQT and Chroma energy normalised statistics (CENS) were obtained from the CQT, and the Chroma STFT and Mel-scaled STFT were obtained from the STFT. In total, there were five features that were extracted and used - CQT, Chroma CQT, CENS, Chroma STFT and Mel-scaled STFT, and these can be seen in the image below. The CQT feature had dimensions of 84 x 640, the chroma features had dimensions of 12 x 640 and the mel-scaled STFT had dimensions of 128 x 640.
 
 ![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/plots.png?raw=true)
 
@@ -73,9 +73,11 @@ All of the models aboved used the Adam optimizer with a learning rate of 0.001. 
 
 ### Baseline Models
 
-The results of the baseline classifiers can be found here: [base_models.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/base_models.ipynb). In addition, the notebook also contains a t-SNE plot of the pre-computed features, which gives a good visual representation of how the features are distributed.
+The results of the baseline classifiers can be found here: [base_models.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/base_models.ipynb). In addition, the notebook also contains a t-SNE plot of the pre-computed features, which gives a good visual representation of how the features are distributed. The plot is also shown below.
 
-From the 12 `sklearn` classifiers used here, the top three best performing classifiers in decreasing order of accuracy were 1. SVM with an RBF kernel, 2. MLP clasifier with a single hidden layer of length 100, and 3. a Ridge Classifier, with test accuracies of . The ROC curves and the confusion matrices of each of the 12 models can be found in the notebook mentioned above.
+![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/tsne.png?raw=true)
+
+From the 12 `sklearn` classifiers used here, the top three best performing classifiers in decreasing order of accuracy were 1. SVM with an RBF kernel, 2. Random Forest clasifier, and 3. a Linear Discriminant Analysis, with test accuracies of 47.8, 46.2 and 45.6. The ROC curves and the confusion matrices of each of the 12 models can be found in the notebook mentioned above.
 
 ### CNNs
 
@@ -89,7 +91,6 @@ The accuracies of each CNN architecture for each feature are listed in the table
 | Mel STFT    | 40.9±0.6  | 36.8±0.4 | 38.6±1.1 |
 | CQT         | **45.5±0.4**  | **39.3±0.5** | **43.1±0.8** |
 
-It is clear that the CQT performs the best amongst the other features. The experiments, along with information such as the training loss, ROC curve and confusion matrices can be found in the following notebooks: [chroma_cnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/chroma_cnn_architecture.ipynb), [mel_cnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/mel_cnn_architecture.ipynb) and [cqt_cnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/cqt_cnn_architecture.ipynb).
 
 Below is a table with the results of using the CQT (the best performing feature) on the implementation of the Resnet and Desnenet architectures, which were mentioned earlier in the CNN Methods section.
 
@@ -101,25 +102,52 @@ Below is a table with the results of using the CQT (the best performing feature)
 | Resnet for all four convolution layers            | 44.8±0.6 |
 | Densenet for all four convolution layers          | **46.7±0.5** |
 
-This experiment here shows that Densenet is able to marginally outperform a basic convolutional neural network, however the Resnet fails to do so. It should be noted that Resnet and Densenet are more computationally expensive than a basic convolution layer due to their added complexity.
+
+These experiments, along with other information such as the training loss, ROC curve and confusion matrices can be found in the following notebooks: [chroma_cnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/chroma_cnn_architecture.ipynb), [mel_cnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/mel_cnn_architecture.ipynb) and [cqt_cnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/cqt_cnn_architecture.ipynb).
+
+From the first experiment, it is clear that the CQT performs best amongst the five features, where it is 5% more accurate than the next best performing feature, the mel-scaled STFT. It is somewhat of a surprise that the CQT performs better than the mel-scaled STFT given the many successes of the mel-scaled STFT in previous related works done by others. When comparing the CQT to the chroma features, there is a large but expected difference in performance, which can be attributed to the difference in size of its input sizes. 
+
+In the next experiment, the Densenet architecture shows a marginal improvement of around 1% compared to the basic convolution layers. However, one should also note that the training time for Densenet was longer than that of a basic convolution layer, thus it is debatable whether the additional training time is worth the slight improvement in performance. It is also curious to note that the Resnet performed worse than the basic convolution layer, and a further investigation would be required to better understand this.
 
 
 ### Convolutional + Recurrent Neural Networks
 
-The CQT of the tracks were used here given that this was the best performing feature in the subsection above. The accuracies of the different convolutional + recurrent architectures and variations of them are listed in the table below.
+The CQT of the tracks were used here, since this was the best performing feature in the CNN experiments above. The accuracies of the different convolutional + recurrent architectures and variations of them are listed in the table below.
 
 | Architecture | LSTM     | LSTM + Bidrectional | GRU          | GRU + Bidrectional |
 | ------------ | :------: | :-----------------: | :------:     | :----------------: |
 | Sequential   | 41.5±0.5 | 40.1±0.7            | **44.9±0.2** | 43.4±0.5           |
 | Parallel     | 42.0±0.4 | **44.9±0.1**        | 43.1±0.6     | 41.6±0.5           |
 
-For the sequential convolutional recurrent neural network, the unidirectional GRU RNN produces the best accuracy, whilst the bidirectional LSTM RNN produces the best accuracy for the parallel recurrent convolution neural network.
+For the sequential convolutional recurrent neural network, the unidirectional GRU RNN produced the best accuracy, whilst the bidirectional LSTM RNN produced the best accuracy for the parallel recurrent convolution neural network. The training loss, ROC curve and confusion matrix can be found in [crnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/crnn_architecture.ipynb).
+
+The results here come as a surprise as both architectures perform slightly worse than the simple CNN architecture in the section above. With the addition of an RNN, one would have expected the hybrid neural network to perform better than a CNN on its own. The papers which proposed these hybrid architectures did however notice a marked improvement in performance when compared to a standalone CNN in their experiments, thus this could point to potential errors plaguing this implementation of these architectures. A more in-depth investigation into the implementation here would be required to troubleshoot the performance issues faced here.
 
 ### Bottom-up Broadcast Neural Network
 
-An accuracy of **51.1±0.1** was achieved with this neural network. Note that this neural network was the most computationally expensive compared to the rest, and took a significantly longer amount of time for training.
+An accuracy of **51.1±0.1** was achieved with this neural network. Note that this neural network was the most computationally expensive when compared to the rest of the architectures above, and took a significantly longer amount of training time . The trainng loss, ROC curve and confusion matrix can be found in [bbnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/bbnn_architecture.ipynb). The ROC curve and confusion matrix of this neural network is also shown below.
 
-## Discussion and Conclusion
+![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/bbnn.png?raw=true)
+
+This architecture proves to be the best performing architecture, achieving the highest accuracy by a sizeable and significant margin of approximately 5%. Despite its high computational cost, this architecture's ability to extract minute and broad features via its parallel convolutional channels of varying sizes gives it the edge to outperform the rest of the other architecture.
+
+### Overall Discussion
+
+Comparing the baseline models and the experiments done on the neural network architectures, it might initially appear that the neural networks generally perform no better, if not worse, than the SVM from the baseline models. However, upon a further look, it can be considered to be unfair to compare these two approaches given the different input data into the baseline models and neural networks. The baseline model uses the pre-computed features from the FMA dataset, which includes statistical features from the CQT, STFT, MFCC, and spectral data, whereas the neural networks only take a single 2D features, such as the CQT, into account. 
+
+
+
+compare baseline_models and CNN/RNN
+
+Looking at the ROC curves and confusion matrices across 
+
+confusion matrices
+comparing to baseline models
+
+## Conclusion
+
+
+
 
 
 
@@ -127,6 +155,7 @@ An accuracy of **51.1±0.1** was achieved with this neural network. Note that th
 * Data Augmentation
 * Additional two papers on autoencoders, and random projections of mel-spectrograms
 * Use other audio features such as MFCC, and potentially combine multiple features together 
+    * Likely to be reason why baseline model works better since it includes multiple features, rather than just a single one
 
 Have a look at CQT exploration by genre.
 
