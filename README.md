@@ -6,6 +6,11 @@
 
 Note: I am neither an expert in the field of Music Information Retrieval (MIR) nor am I particularly well-versed in deep learning. This project is my attempt to get my feet wet and start exploring both of these fields. Big shoutout to arXiv, Medium and countless other blogs, and DeepMind x UCL lecture series for guiding me through the world of MIR and Deep Learning, and Google Colab for the free access to its GPU!
 
+## How to Use Repository
+1. Run the bash script `download_data.sh` to load the FMA dataset, in particular the metadata and the small dataset containing 8000 tracks.
+2. Run the python notebook `features_to_npy.ipynb` to create and save the relevant features (CQTs, STFTs, etc.) for each track in an `.npy` file format.
+3. Pick any of the notebooks ending with `*_architecture.ipynb` to run the model.
+
 ## Introduction
 
 In the field of machine learning, problems such as image classification or natural language processing often take centre stage, and rightly so given how common images and language are used in daily life. The research into music information retrieval (MIR) is likely only a small fraction of the research into these other areas, but it is nonetheless a fascinating one. Problems within MIR, such as genre classification, are often multi-faceted, sitting within the intersections between various research areas of machine learning. Take music genre classification as an example (and because this is also the problem that is going to be tackled later on). Music can be represented pictorially via the frequency domain or temporally through its inherent nature of being a time series data. This potentially means that tools from both image classification and natural language processing can be used to tackle the problem of identifying music genres.
