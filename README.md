@@ -7,9 +7,14 @@
 Note: I am neither an expert in the field of Music Information Retrieval (MIR) nor am I particularly well-versed in deep learning. This project is my attempt to get my feet wet and start exploring both of these fields. Big shoutout to arXiv, Medium and countless other blogs, and DeepMind x UCL lecture series for guiding me through the world of MIR and Deep Learning, and Google Colab for the free access to its GPU!
 
 ## How to Use This Project
-1. Run the bash script `download_data.sh` to load the FMA dataset, in particular the metadata and the small dataset containing 8000 tracks.
+1. Run the bash script `download_data.sh` to download the FMA dataset, in particular the metadata and the small dataset containing 8000 tracks.
 2. Run the python notebook `features_to_npy.ipynb` to create and save the relevant features (CQTs, STFTs, etc.) for each track in an `.npy` file format.
-3. Pick any of the notebooks ending with `*_architecture.ipynb` to run the relevant models. Edit the model names, whilst referring to the model files (`cnn_models.py`, `crnn_models.py`, `bbnn_models.py`), to run different variations of the neural networks in this project.
+
+### Here is a breakdown of the content of this project
+* `cnn_models.py`, `crnn_models.py` and `bbnn_models.py` contain the relevant models used in this project.
+* `utils.py`, `model_utils.py` and `data_loader.py` contain helper methods that load data and evaluate models.
+* The notebooks ending with `_architecture.ipynb` are the notebooks that run the models used in this project. Different neural networks can be called here by changing the class name in these notebooks.
+* `pths/` and `losses/` contain the saved PyTorch models at each training epoch for each model, and the training losses with respect to time for each model. This is more of a personal cloud storage. By running the notebooks mentioned above, the saved PyTorch models will be overwritten. 
 
 ## Introduction
 
