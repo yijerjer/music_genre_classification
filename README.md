@@ -9,7 +9,7 @@ Note: I am neither an expert in the field of Music Information Retrieval (MIR) n
 ## How to Use This Project
 1. Run the bash script `download_data.sh` to load the FMA dataset, in particular the metadata and the small dataset containing 8000 tracks.
 2. Run the python notebook `features_to_npy.ipynb` to create and save the relevant features (CQTs, STFTs, etc.) for each track in an `.npy` file format.
-3. Pick any of the notebooks ending with `*_architecture.ipynb` to run the relevant models.
+3. Pick any of the notebooks ending with `*_architecture.ipynb` to run the relevant models. Edit the model names, whilst referring to the model files (`cnn_models.py`, `crnn_models.py`, `bbnn_models.py`), to run different variations of the neural networks in this project.
 
 ## Introduction
 
