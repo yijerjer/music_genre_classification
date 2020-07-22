@@ -31,7 +31,7 @@ Moreover, this dataset provides pre-computed features, which includes the statis
 
 Using the raw audio `.mp3` files provided by the FMA dataset, two main features, Constant-Q Transform (CQT) and Short-Time Fourier Transform (STFT), were extracted from the raw audio data, which produced a 2D feature of a track in the frequency and temporal domain. A hop length of 1024 was used in both cases, and a n_fft of 1024 was used for the STFT. These values were used in order to balance between achieving a high enough resolution of the features and maintaining a reasonably sized input to the neural network later on. Variations of these two features were also obtained, where the Chroma CQT and Chroma energy normalised statistics (CENS) were obtained from the CQT, and the Chroma STFT and Mel-scaled STFT were obtained from the STFT. In total, there were five features that were extracted and used - CQT, Chroma CQT, CENS, Chroma STFT and Mel-scaled STFT, and these can be seen in the image below. The CQT feature had dimensions of 84 x 640, the chroma features had dimensions of 12 x 640 and the mel-scaled STFT had dimensions of 128 x 640.
 
-![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/plots.png?raw=true)
+![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/images/plots.png?raw=true)
 
 ### Architecture
 
@@ -75,7 +75,7 @@ All of the models above used the Adam optimizer with a learning rate of 0.001. B
 
 The results of the baseline classifiers can be found here: [base_models.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/base_models.ipynb). In addition, the notebook also contains a t-SNE plot of the pre-computed features, which gives a good visual representation of how the features are distributed. The plot is also shown below.
 
-![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/tsne.png?raw=true)
+![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/images/tsne.png?raw=true)
 
 From the 12 `sklearn` classifiers used here, the top three best performing classifiers in decreasing order of accuracy were 1. SVM with an RBF kernel, 2. Random Forest clasifier, and 3. a Linear Discriminant Analysis, with test accuracies of 47.8, 46.2 and 45.6. The ROC curves and the confusion matrices of each of the 12 models can be found in the notebook mentioned above.
 
@@ -127,7 +127,7 @@ The results here come as a surprise as both architectures perform slightly worse
 
 An accuracy of **51.1±0.1** was achieved with this neural network. Note that this neural network was the most computationally expensive when compared to the rest of the architectures above, and took a significantly longer amount of training time. The training loss, ROC curve and confusion matrix can be found in [bbnn_architecture.ipynb](https://nbviewer.jupyter.org/github/yijerjer/music_genre_classification/blob/master/notebooks/bbnn_architecture.ipynb). The ROC curve and confusion matrix of this neural network is also shown below.
 
-![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/bbnn.png?raw=true)
+![alt text](https://github.com/yijerjer/music_genre_classification/blob/master/images/bbnn.png?raw=true)
 
 This architecture proves to be the best performing architecture, achieving the highest accuracy by a sizeable and significant margin of approximately 5%. Despite its high computational cost, this architecture's ability to extract minute and broad features via its parallel convolutional channels of varying sizes gives it the edge to outperform the rest of the other architecture.
 
