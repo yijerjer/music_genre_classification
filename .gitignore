@@ -2,3 +2,4 @@ data/*
 *.csv
 *.zip
 Untitled*
+notebooks/.ipynb_checkpoints/*
